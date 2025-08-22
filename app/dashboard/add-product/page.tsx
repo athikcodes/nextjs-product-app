@@ -11,6 +11,8 @@ export default function AddProduct() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [image, setImage] = useState(""); // Image URL
+  const [quality, setQuality] = useState<string[]>([]); // Key Features
 
   if (!session) {
     router.push("/login");
@@ -23,7 +25,7 @@ export default function AddProduct() {
     const res = await fetch("/api/products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, description, price }),
+      body: JSON.stringify({ name, description, price, image, quality }),
     });
 
     if (res.ok) {
@@ -37,31 +39,17 @@ export default function AddProduct() {
     <div className="max-w-md mx-auto py-10">
       <h1 className="text-2xl font-bold mb-6">➕ Add Product</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
+        <input placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="border p-2 w-full rounded" />
+        <input placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} className="border p-2 w-full rounded" />
+        <input type="number" placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} className="border p-2 w-full rounded" />
+        <input placeholder="Image URL" value={image} onChange={e => setImage(e.target.value)} className="border p-2 w-full rounded" />
         <input
-          placeholder="Name"
-          value={name}
-          onChange={e => setName(e.target.value)}
+          placeholder="Key Features (comma separated)"
+          value={quality.join(", ")}
+          onChange={e => setQuality(e.target.value.split(",").map(q => q.trim()))}
           className="border p-2 w-full rounded"
         />
-        <input
-          placeholder="Description"
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          type="number"
-          placeholder="Price"
-          value={price}
-          onChange={e => setPrice(e.target.value)}
-          className="border p-2 w-full rounded"
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Add Product
-        </button>
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Add Product</button>
       </form>
     </div>
   );
