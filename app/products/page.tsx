@@ -4,13 +4,22 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+type Product = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  quality: string[];
+};
+
 export default function ProductsPage() {
-  const [products, setProducts] = useState<[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     fetch("/api/products")
       .then((res) => res.json())
-      .then((data) => setProducts(data));
+      .then((data: Product[]) => setProducts(data));
   }, []);
 
   return (

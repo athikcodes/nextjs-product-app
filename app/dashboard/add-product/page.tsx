@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AddProduct() {
   const { data: session } = useSession();
@@ -14,8 +14,13 @@ export default function AddProduct() {
   const [image, setImage] = useState(""); // Image URL
   const [quality, setQuality] = useState<string[]>([]); // Key Features
 
+  useEffect(() => {
+    if (!session) {
+      router.push("/login");
+    }
+  }, [session, router]);
+
   if (!session) {
-    router.push("/login");
     return <p>Redirecting...</p>;
   }
 
